@@ -30,7 +30,7 @@ PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACC
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
 [Peer]
-PublicKey = "$${wg_laptop_pub_key}"
+PublicKey = "$${wg_laptop_public_key}"
 AllowedIPs = 192.168.2.2/32
 EOF
 
