@@ -142,7 +142,7 @@ resource "aws_launch_configuration" "wireguard-launch-config" {
     key_name               = "${var.ssh_key_id}"
     iam_instance_profile   = "${aws_iam_instance_profile.wireguard-profile.name}"
     user_data              = "${data.template_cloudinit_config.config.rendered}"
-    vpc_security_group_ids = ["${aws_security_group.wireguard-sg.id}"]
+    security_groups        = ["${aws_security_group.wireguard-sg.id}"]
 
     lifecycle {
       create_before_destroy = true
