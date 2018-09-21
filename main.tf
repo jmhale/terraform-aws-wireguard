@@ -35,8 +35,8 @@ AllowedIPs = 192.168.2.2/32
 EOF
 
   vars {
-    wg_server_private_key = "${aws_ssm_parameter.wg-server-private-key.value}"
-    wg_laptop_public_key  = "${aws_ssm_parameter.wg-laptop-public-key.value}"
+    wg_server_private_key = "${data.aws_ssm_parameter.wg-server-private-key.value}"
+    wg_laptop_public_key  = "${data.aws_ssm_parameter.wg-laptop-public-key.value}"
   }
 }
 
