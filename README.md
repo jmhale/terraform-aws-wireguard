@@ -12,7 +12,7 @@ The following variables need to be passed to the module:
 - `vpc_id`: The VPC ID in which Terraform will launch the resources.
 - `subnets`: A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list.
 
-Example module init:
+### Example module init
 ```
 module "wireguard" {
   source      = "github.com/jmhale/terraform-wireguard"
