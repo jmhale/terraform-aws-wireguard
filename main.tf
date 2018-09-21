@@ -5,8 +5,8 @@ variable "subnets"     {
   type = "list"
 }
 
-data "aws_ssm_parameter" "wg-server-private-key" { name = "wg-server-private-key" }
-data "aws_ssm_parameter" "wg-laptop-public-key"  { name = "wg-laptop-public-key" }
+data "aws_ssm_parameter" "wg-server-private-key" { name = "/wireguard/wg-server-private-key" }
+data "aws_ssm_parameter" "wg-laptop-public-key"  { name = "/wireguard/wg-laptop-public-key" }
 
 data "aws_iam_policy_document" "ec2-assume-role" {
     statement {
