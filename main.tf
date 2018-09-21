@@ -1,7 +1,9 @@
 variable "ssh_key_id"  {}
 variable "dns_zone_id" {}
 variable "vpc_id"      {}
-variable "subnets"     {}
+variable "subnets"     {
+  type = "list"
+}
 
 data "aws_ssm_parameter" "wg-server-private-key" { name = "wg-server-private-key" }
 data "aws_ssm_parameter" "wg-laptop-public-key"  { name = "wg-laptop-public-key" }
