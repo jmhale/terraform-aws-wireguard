@@ -47,6 +47,8 @@ data "template_cloudinit_config" "config" {
 add-apt-repository ppa:wireguard/wireguard
 apt-get update
 apt-get install -y wireguard-dkms wireguard-tools awscli
+export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+aws ec2 associate-address --allocation-id ${aws_eip.wireguard_eip.id} --instance-id $${INSTANCE_ID}
 EOF
   }
 
@@ -136,13 +138,14 @@ resource "aws_security_group" "wireguard-sg" {
   }
 }
 resource "aws_launch_configuration" "wireguard-launch-config" {
-    name_prefix            = "wireguard-lc-"
-    image_id               = "ami-da05a4a0"
-    instance_type          = "t2.micro"
-    key_name               = "${var.ssh_key_id}"
-    iam_instance_profile   = "${aws_iam_instance_profile.wireguard-profile.name}"
-    user_data              = "${data.template_cloudinit_config.config.rendered}"
-    security_groups        = ["${aws_security_group.wireguard-sg.id}"]
+    name_prefix                 = "wireguard-lc-"
+    image_id                    = "ami-da05a4a0"
+    instance_type               = "t2.micro"
+    key_name                    = "${var.ssh_key_id}"
+    iam_instance_profile        = "${aws_iam_instance_profile.wireguard-profile.name}"
+    user_data                   = "${data.template_cloudinit_config.config.rendered}"
+    security_groups             = ["${aws_security_group.wireguard-sg.id}"]
+    associate_public_ip_address = true
 
     lifecycle {
       create_before_destroy = true
