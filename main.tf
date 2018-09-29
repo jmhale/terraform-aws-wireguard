@@ -165,9 +165,22 @@ resource "aws_autoscaling_group" "wireguard-asg" {
     create_before_destroy = true
   }
 
-  tags {
-    Name = "wireguard",
-    Project = "wireguard",
-    tf-managed = "True"
-  }
+  tags = [
+    {
+      key                 = "Name",
+      value               = "wireguard",
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project",
+      value               = "wireguard",
+      propagate_at_launch = true
+    },
+    {
+      key                 = "tf-managed",
+      value               = "True",
+      propagate_at_launch = true
+    },
+  ]
+}
 }
