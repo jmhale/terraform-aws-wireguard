@@ -46,7 +46,7 @@ data "template_cloudinit_config" "config" {
     content_type = "text/x-shellscript"
 
     content = <<EOF
-add-apt-repository ppa:wireguard/wireguard
+add-apt-repository -y ppa:wireguard/wireguard
 apt-get update
 apt-get install -y wireguard-dkms wireguard-tools awscli
 export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
