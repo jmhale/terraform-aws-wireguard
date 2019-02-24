@@ -11,12 +11,12 @@ Before using this module, you'll need to generate a key pair for your server and
 - Generate a key pair for the client
   - `wg genkey | tee client-privatekey | wg pubkey > client-publickey`
 - Generate a key pair for the server
- - `wg genkey | tee server-privatekey | wg pubkey > server-publickey`
+  - `wg genkey | tee server-privatekey | wg pubkey > server-publickey`
 
 - Add the client public key to the AWS SSM parameter: `/wireguard/wg-laptop-public-key`
- - `aws ssm put-parameter --name /wireguard/wg-laptop-public-key --type SecureString --value $ClientPublicKeyValue`
+  - `aws ssm put-parameter --name /wireguard/wg-laptop-public-key --type SecureString --value $ClientPublicKeyValue`
 - Add the server private key to the AWS SSM parameter: `/wireguard/wg-server-private-key`
- - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
+  - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
 
 ### Required variables
 The following variables need to be passed to the module:
