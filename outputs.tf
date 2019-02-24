@@ -3,5 +3,5 @@ output "vpn_ip" {
 }
 
 output "vpn_sg_id" {
-  value = "aws_security_group.sg_wireguard_admin.id"
+  value = "${aws_security_group.sg_wireguard_admin.id}"
 }
