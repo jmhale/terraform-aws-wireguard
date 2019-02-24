@@ -7,7 +7,7 @@ Beware! Work in progress! Use at your own peril! Here be dragons!
 ## Prerequisites
 Before using this module, you'll need to generate a key pair for your server and client, and store the server's private key and client's public key in AWS SSM, which cloud-init will source and add to WireGuard's configuration.
 
-- Install the WireGuard tools for your os: https://www.wireguard.com/install/
+- Install the WireGuard tools for your OS: https://www.wireguard.com/install/
 - Generate a key pair for the client
   - `wg genkey | tee client-privatekey | wg pubkey > client-publickey`
 - Generate a key pair for the server
