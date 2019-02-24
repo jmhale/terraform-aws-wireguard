@@ -41,6 +41,7 @@ module "wireguard" {
 | Output Name | Description |
 |---------------|-------------|
 |`vpn_ip`|The public IPv4 address of the AWS Elastic IP assigned to the instance.|
+|`vpn_sg_id`|ID of the internal Security Group to associate with other resources needing to be accessed on VPN|
 
 ## Caveats
 
