@@ -1,4 +1,4 @@
-# terraform-wireguard
+# terraform-aws-wireguard
 
 A Terraform module to deploy a WireGuard VPN server on AWS.
 
