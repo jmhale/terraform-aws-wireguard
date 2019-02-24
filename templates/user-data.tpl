@@ -6,9 +6,6 @@ packages:
   - wireguard-dkms
   - wireguard-tools
   - awscli
-runcmd:
-  - export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-  - aws ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
 write_files:
   - path: /etc/wireguard/wg0.conf
     content: |
@@ -23,6 +20,9 @@ write_files:
       PublicKey = ${wg_laptop_public_key}
       AllowedIPs = 192.168.2.2/32
 runcmd:
+  - export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+  - export REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oP '\"region\"[[:space:]]*:[[:space:]]*\"\K[^\"]+')
+  - aws --region $${REGION} ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
   - chown -R root:root /etc/wireguard/
   - chmod -R og-rwx /etc/wireguard/*
   - sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
