@@ -19,61 +19,20 @@ data "aws_iam_policy_document" "ec2_assume_role" {
   }
 }
 
-data "template_file" "wg0_config" {
-  template = <<EOF
-[Interface]
-Address = 192.168.2.1
-PrivateKey = "$${wg_server_private_key}"
-ListenPort = 51820
-PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-
-[Peer]
-PublicKey = "$${wg_laptop_public_key}"
-AllowedIPs = 192.168.2.2/32
-EOF
+data "template_file" "user_data" {
+  template = "${file("${path.module}/templates/user-data.tpl")}"
 
   vars {
     wg_server_private_key = "${data.aws_ssm_parameter.wg_server_private_key.value}"
     wg_laptop_public_key  = "${data.aws_ssm_parameter.wg_laptop_public_key.value}"
+    eip_id                = "${aws_eip.wireguard_eip.id}"
   }
 }
 
 data "template_cloudinit_config" "config" {
-  gzip = false
-
   part {
-    content_type = "text/x-shellscript"
-
-    content = <<EOF
-add-apt-repository -y ppa:wireguard/wireguard
-apt-get update
-apt-get install -y wireguard-dkms wireguard-tools awscli
-export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-aws ec2 associate-address --allocation-id ${aws_eip.wireguard_eip.id} --instance-id $${INSTANCE_ID}
-EOF
-  }
-
-  part {
-    filename     = "/etc/wireguard/wg.conf"
-    content_type = "text/part-handler"
-    content      = "${data.template_file.wg0_config.rendered}"
-  }
-
-  part {
-    content_type = "text/x-shellscript"
-
-    content = <<EOF
-chown -R root:root /etc/wireguard/
-chmod -R og-rwx /etc/wireguard/*
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
-sysctl -p
-ufw allow ssh
-ufw allow 51820/udp
-ufw --force enable
-systemctl enable wg-quick@wg0.service
-systemctl start wg-quick@wg0.service
-EOF
+    content_type = "text/cloud-config"
+    content      = "${data.template_file.user_data.rendered}"
   }
 }
 
