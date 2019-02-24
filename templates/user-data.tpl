@@ -1,5 +1,6 @@
 #cloud-config
 package_update: true
+package_upgrade: true
 apt_sources:
   - source: "ppa:wireguard/wireguard"
 packages:
