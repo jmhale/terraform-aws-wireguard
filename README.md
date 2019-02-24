@@ -18,14 +18,14 @@ Before using this module, you'll need to generate a key pair for your server and
 - Add the server private key to the AWS SSM parameter: `/wireguard/wg-server-private-key`
   - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
 
-### Variables
+## Variables
 The following variables need to be passed to the module:
 
 - `ssh_key_id`: A SSH public key ID to add to the VPN instance.
 - `vpc_id`: The VPC ID in which Terraform will launch the resources.
 - `public_subnet_ids`: A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list.
 
-### Usage
+## Usage
 ```
 module "wireguard" {
   source            = "git@github.com:jmhale/terraform-wireguard.git"
@@ -35,14 +35,14 @@ module "wireguard" {
 }
 ```
 
-### Outputs
+## Outputs
 - `vpn_ip`: The public IPv4 address of the AWS Elastic IP assigned to the instance.
 
-### Caveats
+## Caveats
 
 - I would strongly recommend forking this repo or cloning it locally and change the `source` definition to be something that you control. You really don't want your infra to be at the mercy of my changes.
 
 
-### To-do
+## To-do
 
 - Add the mechanism to attach the EIP to the instance, via cloud-init.
