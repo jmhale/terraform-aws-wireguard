@@ -2,8 +2,6 @@
 
 A Terraform module to deploy a WireGuard VPN server on AWS.
 
-Beware! Work in progress! Use at your own peril! Here be dragons!
-
 ## Prerequisites
 Before using this module, you'll need to generate a key pair for your server and client, and store the server's private key and client's public key in AWS SSM, which cloud-init will source and add to WireGuard's configuration.
 
@@ -50,4 +48,4 @@ module "wireguard" {
 
 ## To-do
 
-- Add the mechanism to attach the EIP to the instance, via cloud-init.
+- Support multiple clients.
