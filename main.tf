@@ -3,13 +3,13 @@ data "template_file" "user_data" {
 
   vars {
     wg_server_private_key = "${data.aws_ssm_parameter.wg_server_private_key.value}"
-    peers                 = "${join(",", data.template_file.wg_client_data_json.*.rendered)}"
+    peers                 = "${join("\n", data.template_file.wg_client_data_json.*.rendered)}"
     eip_id                = "${aws_eip.wireguard_eip.id}"
   }
 }
 
 data "template_file" "wg_client_data_json" {
-  template = "${file("${path.module}/client-data.json.tpl")}"
+  template = "${file("${path.module}/client-data.tpl")}"
   count    = "${length(var.wg_client_public_keys)}"
 
   vars {
