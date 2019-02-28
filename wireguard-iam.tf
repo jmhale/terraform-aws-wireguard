@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "wireguard_policy_doc" {
       "ec2:AssociateAddress",
     ]
 
-    resources = ["*"] ## TODO: See if we can scope this to wireguard_eip
+    resources = ["*"]
   }
 }
 
