@@ -6,15 +6,13 @@ A Terraform module to deploy a WireGuard VPN server on AWS.
 Before using this module, you'll need to generate a key pair for your server and client, and store the server's private key and client's public key in AWS SSM, which cloud-init will source and add to WireGuard's configuration.
 
 - Install the WireGuard tools for your OS: https://www.wireguard.com/install/
-- Generate a key pair for the client
-  - `wg genkey | tee client-privatekey | wg pubkey > client-publickey`
+- Generate a key pair for each client
+  - `wg genkey | tee client1-privatekey | wg pubkey > client1-publickey`
 - Generate a key pair for the server
   - `wg genkey | tee server-privatekey | wg pubkey > server-publickey`
-
-- Add the client public key to the AWS SSM parameter: `/wireguard/wg-laptop-public-key`
-  - `aws ssm put-parameter --name /wireguard/wg-laptop-public-key --type SecureString --value $ClientPublicKeyValue`
 - Add the server private key to the AWS SSM parameter: `/wireguard/wg-server-private-key`
   - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
+- Add each client's public key, along with the next available IP address as a key:value pair to the wg_client_public_keys map. See Usage for details.
 
 ## Variables
 | Variable Name | Type | Required |Description |
