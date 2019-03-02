@@ -9,7 +9,7 @@ data "template_file" "user_data" {
 }
 
 data "template_file" "wg_client_data_json" {
-  template = "${file("${path.module}/client-data.tpl")}"
+  template = "${file("${path.module}/templates/client-data.tpl")}"
   count    = "${length(var.wg_client_public_keys)}"
 
   vars {
