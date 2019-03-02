@@ -25,3 +25,7 @@ variable "wg_client_public_keys" {
     },
   ]
 }
+
+variable "env" {
+  default = "prod"
+}
