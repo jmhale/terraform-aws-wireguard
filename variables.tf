@@ -12,18 +12,6 @@ variable "public_subnet_ids" {
 
 variable "wg_client_public_keys" {
   type = "list"
-
-  default = [
-    {
-      "192.168.2.2/32" = "ABCDEFG"
-    },
-    {
-      "192.168.2.3/32" = "ABCDEFG"
-    },
-    {
-      "192.168.2.4/32" = "ABCDEFG"
-    },
-  ]
 }
 
 variable "env" {

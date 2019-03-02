@@ -25,6 +25,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`ingress_security_group_id`|`string`|Yes|The ID of the Security Group to allow SSH access from.|
 |`ami_id`|`string`|No. Defaults to Ubuntu 16.04 AMI in us-east-1|The AMI ID to use.|
 |`env`|`string`|No. Defaults "prod"|The environment for WireGuard|
+|`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 
 ## Usage
 ```
@@ -33,6 +34,11 @@ module "wireguard" {
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
   public_subnet_ids = ["subnet-01234567"]
+  wg_client_public_keys = [
+    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},
+    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
+    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+  ]
 }
 ```
 
