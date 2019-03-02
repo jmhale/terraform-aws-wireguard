@@ -24,6 +24,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`vpc_id`|`string`|Yes|The VPC ID in which Terraform will launch the resources.|
 |`ingress_security_group_id`|`string`|Yes|The ID of the Security Group to allow SSH access from.|
 |`ami_id`|`string`|No. Defaults to Ubuntu 16.04 AMI in us-east-1|The AMI ID to use.|
+|`env`|`string`|No. Defaults "prod"|The environment for WireGuard|
 
 ## Usage
 ```
