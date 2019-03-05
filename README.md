@@ -6,15 +6,13 @@ A Terraform module to deploy a WireGuard VPN server on AWS.
 Before using this module, you'll need to generate a key pair for your server and client, and store the server's private key and client's public key in AWS SSM, which cloud-init will source and add to WireGuard's configuration.
 
 - Install the WireGuard tools for your OS: https://www.wireguard.com/install/
-- Generate a key pair for the client
-  - `wg genkey | tee client-privatekey | wg pubkey > client-publickey`
+- Generate a key pair for each client
+  - `wg genkey | tee client1-privatekey | wg pubkey > client1-publickey`
 - Generate a key pair for the server
   - `wg genkey | tee server-privatekey | wg pubkey > server-publickey`
-
-- Add the client public key to the AWS SSM parameter: `/wireguard/wg-laptop-public-key`
-  - `aws ssm put-parameter --name /wireguard/wg-laptop-public-key --type SecureString --value $ClientPublicKeyValue`
 - Add the server private key to the AWS SSM parameter: `/wireguard/wg-server-private-key`
   - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
+- Add each client's public key, along with the next available IP address as a key:value pair to the wg_client_public_keys map. See Usage for details.
 
 ## Variables
 | Variable Name | Type | Required |Description |
@@ -24,6 +22,8 @@ Before using this module, you'll need to generate a key pair for your server and
 |`vpc_id`|`string`|Yes|The VPC ID in which Terraform will launch the resources.|
 |`ingress_security_group_id`|`string`|Yes|The ID of the Security Group to allow SSH access from.|
 |`ami_id`|`string`|No. Defaults to Ubuntu 16.04 AMI in us-east-1|The AMI ID to use.|
+|`env`|`string`|No. Defaults "prod"|The environment for WireGuard|
+|`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 
 ## Usage
 ```
@@ -32,6 +32,11 @@ module "wireguard" {
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
   public_subnet_ids = ["subnet-01234567"]
+  wg_client_public_keys = [
+    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},
+    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
+    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+  ]
 }
 ```
 

@@ -3,8 +3,18 @@ data "template_file" "user_data" {
 
   vars {
     wg_server_private_key = "${data.aws_ssm_parameter.wg_server_private_key.value}"
-    wg_laptop_public_key  = "${data.aws_ssm_parameter.wg_laptop_public_key.value}"
+    peers                 = "${join("\n", data.template_file.wg_client_data_json.*.rendered)}"
     eip_id                = "${aws_eip.wireguard_eip.id}"
+  }
+}
+
+data "template_file" "wg_client_data_json" {
+  template = "${file("${path.module}/templates/client-data.tpl")}"
+  count    = "${length(var.wg_client_public_keys)}"
+
+  vars {
+    client_pub_key = "${element(values(var.wg_client_public_keys[count.index]), 0)}"
+    client_ip      = "${element(keys(var.wg_client_public_keys[count.index]), 0)}"
   }
 }
 
@@ -20,7 +30,7 @@ resource "aws_eip" "wireguard_eip" {
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
-  name_prefix                 = "wireguard-lc-"
+  name_prefix                 = "wireguard-${var.env}-lc-"
   image_id                    = "${var.ami_id}"
   instance_type               = "t2.micro"
   key_name                    = "${var.ssh_key_id}"
@@ -35,7 +45,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name_prefix          = "wireguard-asg-"
+  name_prefix          = "wireguard-${var.env}-asg-"
   max_size             = 1
   min_size             = 1
   launch_configuration = "${aws_launch_configuration.wireguard_launch_config.name}"
@@ -50,7 +60,7 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   tags = [
     {
       key                 = "Name"
-      value               = "wireguard"
+      value               = "wireguard-${var.env}"
       propagate_at_launch = true
     },
     {

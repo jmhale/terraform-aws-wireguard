@@ -17,9 +17,7 @@ write_files:
       PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
       PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
-      [Peer]
-      PublicKey = ${wg_laptop_public_key}
-      AllowedIPs = 192.168.2.2/32
+      ${peers}
 runcmd:
   - export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
   - export REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oP '\"region\"[[:space:]]*:[[:space:]]*\"\K[^\"]+')
