@@ -45,7 +45,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name_prefix          = "wireguard-${var.env}-asg-"
+  name_prefix          = "wireguard-${var.env}-asg-${aws_launch_configuration.wireguard_launch_config.name}-"
   max_size             = 1
   min_size             = 1
   launch_configuration = "${aws_launch_configuration.wireguard_launch_config.name}"
