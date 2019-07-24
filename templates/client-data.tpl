@@ -1,3 +1,3 @@
-      [Peer]
-      PublicKey = ${client_pub_key}
-      AllowedIPs = ${client_ip}
+[Peer]
+PublicKey = ${client_pub_key}
+AllowedIPs = ${client_ip}

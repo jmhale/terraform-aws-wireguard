@@ -21,6 +21,11 @@ variable "wg_client_public_keys" {
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
+variable "wg_server_net" {
+  default = "192.168.2.1/24"
+  description = "ip range for vpn server"
+}
+
 variable "env" {
   default = "prod"
   description = "The name of environment for WireGuard. Used to differentiate multiple deployments"

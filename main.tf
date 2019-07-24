@@ -1,8 +1,9 @@
 data "template_file" "user_data" {
-  template = "${file("${path.module}/templates/user-data.tpl")}"
+  template = "${file("${path.module}/templates/user-data.txt")}"
 
   vars {
     wg_server_private_key = "${data.aws_ssm_parameter.wg_server_private_key.value}"
+    wg_server_net         = "${var.wg_server_net}"
     peers                 = "${join("\n", data.template_file.wg_client_data_json.*.rendered)}"
     eip_id                = "${aws_eip.wireguard_eip.id}"
   }
@@ -18,15 +19,11 @@ data "template_file" "wg_client_data_json" {
   }
 }
 
-data "template_cloudinit_config" "config" {
-  part {
-    content_type = "text/cloud-config"
-    content      = "${data.template_file.user_data.rendered}"
-  }
-}
-
 resource "aws_eip" "wireguard_eip" {
   vpc = true
+  tags {
+    Name = "wireguard-${var.env}-eip"
+  }
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
@@ -35,7 +32,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   instance_type               = "t2.micro"
   key_name                    = "${var.ssh_key_id}"
   iam_instance_profile        = "${aws_iam_instance_profile.wireguard_profile.name}"
-  user_data                   = "${data.template_cloudinit_config.config.rendered}"
+  user_data                   = "${data.template_file.user_data.rendered}"
   security_groups             = ["${aws_security_group.sg_wireguard_external.id}"]
   associate_public_ip_address = true
 
