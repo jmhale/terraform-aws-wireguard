@@ -6,11 +6,6 @@ variable "vpc_id" {
   description = "The VPC ID in which Terraform will launch the resources."
 }
 
-variable "ami_id" {
-  default = "ami-da05a4a0"
-  description = "The AMI ID to use."
-}
-
 variable "public_subnet_ids" {
   type = "list"
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
@@ -23,7 +18,12 @@ variable "wg_client_public_keys" {
 
 variable "wg_server_net" {
   default = "192.168.2.1/24"
-  description = "ip range for vpn server"
+  description = "IP range for vpn server"
+}
+
+variable "wg_server_port" {
+  default = 51820
+  description = "Port for the vpn server"
 }
 
 variable "env" {

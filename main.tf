@@ -4,6 +4,7 @@ data "template_file" "user_data" {
   vars {
     wg_server_private_key = "${data.aws_ssm_parameter.wg_server_private_key.value}"
     wg_server_net         = "${var.wg_server_net}"
+    wg_server_port        = "${var.wg_server_port}"
     peers                 = "${join("\n", data.template_file.wg_client_data_json.*.rendered)}"
     eip_id                = "${aws_eip.wireguard_eip.id}"
   }
@@ -26,9 +27,23 @@ resource "aws_eip" "wireguard_eip" {
   }
 }
 
+# We're using ubuntu images - this lets us grab the latest image for our region from Canonical
+data "aws_ami" "ubuntu" {
+    most_recent = true
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-*-16.04-amd64-server-*"]
+    }
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+    owners = ["099720109477"] # Canonical
+}
+
 resource "aws_launch_configuration" "wireguard_launch_config" {
   name_prefix                 = "wireguard-${var.env}-lc-"
-  image_id                    = "${var.ami_id}"
+  image_id                    = "${data.aws_ami.ubuntu.id}"
   instance_type               = "t2.micro"
   key_name                    = "${var.ssh_key_id}"
   iam_instance_profile        = "${aws_iam_instance_profile.wireguard_profile.name}"
