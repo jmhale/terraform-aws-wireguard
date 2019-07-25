@@ -2,7 +2,7 @@
 add-apt-repository "ppa:wireguard/wireguard"
 apt-get update -y
 apt-get upgrade -y
-apt-get install -y wireguard-dkms wireguard-tools awscli # 18.04 resolvconf ifupdown2
+apt-get install -y wireguard-dkms wireguard-tools awscli
 
 cat > /etc/wireguard/wg0.conf <<- EOF
 [Interface]
