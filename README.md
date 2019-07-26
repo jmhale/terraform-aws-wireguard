@@ -24,13 +24,39 @@ Before using this module, you'll need to generate a key pair for your server and
 |`env`|`string`|No. Defaults "prod"|The name of environment for WireGuard. Used to differentiate multiple deployments.|
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 
-## Usage
+## EIP/public subnet usage
+```
+resource "aws_eip" "wireguard" {
+  vpc = true
+  tags = {
+    Name = "wireguard"
+  }
+}
+
+module "wireguard" {
+  source                = "git@github.com:jmhale/terraform-wireguard.git"
+  ssh_key_id            = "ssh-key-id-0987654"
+  vpc_id                = "vpc-01234567"
+  subnet_ids            = ["subnet-01234567"]
+  eip_id                = "${aws_eip.wireguard.id}"
+  wg_server_net         = "192.168.2.1/24" # client_ips_must_exist_in_this_net
+  wg_client_public_keys = [
+    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},
+    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
+    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+  ]
+}
+```
+
+## ELB/private subnet usage
 ```
 module "wireguard" {
   source                = "git@github.com:jmhale/terraform-wireguard.git"
   ssh_key_id            = "ssh-key-id-0987654"
   vpc_id                = "vpc-01234567"
-  public_subnet_ids     = ["subnet-01234567"]
+  subnet_ids            = ["subnet-01234567"]
+  target_group_arns     = ["${aws_lb_target_group.wireguard.arn}"]
+  associate_public_ip_address = false
   wg_server_net         = "192.168.2.1/24" # client_ips_must_exist_in_this_net
   wg_client_public_keys = [
     {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},

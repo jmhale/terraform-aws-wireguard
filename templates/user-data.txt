@@ -15,9 +15,13 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACC
 ${peers}
 EOF
 
-export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-export REGION=$(curl -fsq http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
-aws --region $${REGION} ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
+# we go with the eip if it is provided
+if [ "${eip_id}" != "set_me_or_lose_me" ]; then
+  export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+  export REGION=$(curl -fsq http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
+  aws --region $${REGION} ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
+fi
+
 chown -R root:root /etc/wireguard/
 chmod -R og-rwx /etc/wireguard/*
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf

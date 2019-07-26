@@ -6,7 +6,7 @@ data "template_file" "user_data" {
     wg_server_net         = "${var.wg_server_net}"
     wg_server_port        = "${var.wg_server_port}"
     peers                 = "${join("\n", data.template_file.wg_client_data_json.*.rendered)}"
-    eip_id                = "${aws_eip.wireguard_eip.id}"
+    eip_id                = "${var.eip_id}"
   }
 }
 
@@ -17,13 +17,6 @@ data "template_file" "wg_client_data_json" {
   vars = {
     client_pub_key = "${element(values(var.wg_client_public_keys[count.index]), 0)}"
     client_ip      = "${element(keys(var.wg_client_public_keys[count.index]), 0)}"
-  }
-}
-
-resource "aws_eip" "wireguard_eip" {
-  vpc = true
-  tags = {
-    Name = "wireguard-${var.env}-eip"
   }
 }
 
@@ -49,7 +42,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   iam_instance_profile        = "${aws_iam_instance_profile.wireguard_profile.name}"
   user_data                   = "${data.template_file.user_data.rendered}"
   security_groups             = ["${aws_security_group.sg_wireguard_external.id}"]
-  associate_public_ip_address = true
+  associate_public_ip_address = "${var.associate_public_ip_address}"
 
   lifecycle {
     create_before_destroy = true
@@ -61,9 +54,10 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   max_size             = 1
   min_size             = 1
   launch_configuration = "${aws_launch_configuration.wireguard_launch_config.name}"
-  vpc_zone_identifier  = "${var.public_subnet_ids}"
+  vpc_zone_identifier  = "${var.subnet_ids}"
   health_check_type    = "EC2"
   termination_policies = ["OldestInstance"]
+  target_group_arns    = "${var.target_group_arns}"
 
   lifecycle {
     create_before_destroy = true
