@@ -27,8 +27,8 @@ variable "wg_server_port" {
 }
 
 variable "eip_id" {
-  default = "set_me_or_lose_me"
-  description = "ID of the EIP allocation if the defailt remain the eip instructions in userdata are ignored"
+  default = "disabled"
+  description = "If we detect the default 'disabled' we avoid the EIP switching code in user-data on wg server startup, if an EIP ID is provided the instance will attempt to switch EIP."
 }
 
 variable "associate_public_ip_address" {
