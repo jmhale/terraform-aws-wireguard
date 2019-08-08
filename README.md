@@ -75,7 +75,8 @@ module "wireguard" {
 | Output Name | Description |
 |---------------|-------------|
 |`vpn_asg_name`|The name of the wireguard Auto Scaling Group|
-|`vpn_sg_id`|ID of the internal Security Group to associate with other resources needing to be accessed on VPN|
+|`vpn_sg_admin_id`|ID of the internal Security Group to associate with other resources needing to be accessed on VPN.|
+|`vpn_sg_external_id`|ID of the external Security Group to associate with the VPN.|
 
 ## Caveats
 
