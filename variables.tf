@@ -12,7 +12,7 @@ variable "subnet_ids" {
 }
 
 variable "wg_client_public_keys" {
-  type        = list(string)
+# type        = map(string)
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
@@ -38,7 +38,7 @@ variable "associate_public_ip_address" {
 
 variable "target_group_arns" {
   type        = list(string)
-  default     = {}
+  default     = null
   description = "Running a scaling group behind an LB requires this variable, default null means it won't be included if not set"
 }
 
@@ -46,4 +46,3 @@ variable "env" {
   default     = "prod"
   description = "The name of environment for WireGuard. Used to differentiate multiple deployments"
 }
-
