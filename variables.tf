@@ -2,6 +2,16 @@ variable "ssh_key_id" {
   description = "A SSH public key ID to add to the VPN instance."
 }
 
+variable "instance_type" {
+  default = "t2.micro"
+  description = "The machine type to launch, some machines may offer higher throughput for higher use cases."
+}
+
+variable "wg_server_count" {
+  default = 1
+  description = "We may want more than one machine in a scaling group, but 1 is recommended."
+}
+
 variable "vpc_id" {
   description = "The VPC ID in which Terraform will launch the resources."
 }
@@ -18,7 +28,7 @@ variable "wg_client_public_keys" {
 
 variable "wg_server_net" {
   default     = "192.168.2.1/24"
-  description = "IP range for vpn server - make sure your Client ids are in this range"
+  description = "IP range for vpn server - make sure your Client ips are in this range but not the specific ip i.e. not .1"
 }
 
 variable "wg_server_port" {

@@ -25,6 +25,8 @@ Before using this module, you'll need to generate a key pair for your server and
 |`target_group_arns`|`string`|Optional|The Loadbalancer Target Group to which the vpn server ASG will attach.|
 |`associate_public_ip_address`|`boolean`|Optional - defaults to `true`|Whether or not to associate a public ip.|
 |`additional_security_group_ids`|`list`|Optional - empty| Used to allow added access to reach the WG server or allow loadbalanced tests.|
+|`wg_server_count`|`integer`|Optional|Number of VPN servers to start, only makes sense in loadbalanced scenario.|
+|`instance_type`|`string`|Optional|Size of VPN server, defaults to t2.micro|
 |`wg_server_net`|`cidr range`|Yes|The server net - all wg_client_public_keys entries need to be within this net .|
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 

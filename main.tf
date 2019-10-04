@@ -47,7 +47,7 @@ locals {
 resource "aws_launch_configuration" "wireguard_launch_config" {
   name_prefix                 = "wireguard-${var.env}-lc-"
   image_id                    = data.aws_ami.ubuntu.id
-  instance_type               = "t2.micro"
+  instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
   iam_instance_profile        = aws_iam_instance_profile.wireguard_profile.name
   user_data                   = data.template_file.user_data.rendered
@@ -61,8 +61,8 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 
 resource "aws_autoscaling_group" "wireguard_asg" {
   name_prefix          = "wireguard-${var.env}-asg-"
-  max_size             = 1
-  min_size             = 1
+  max_size             = var.wg_server_count
+  min_size             = var.wg_server_count
   launch_configuration = aws_launch_configuration.wireguard_launch_config.name
   vpc_zone_identifier  = var.subnet_ids
   health_check_type    = "EC2"
