@@ -7,21 +7,22 @@ variable "vpc_id" {
 }
 
 variable "ami_id" {
-  default = "ami-da05a4a0"
+  default     = "ami-da05a4a0"
   description = "The AMI ID to use."
 }
 
 variable "public_subnet_ids" {
-  type = "list"
+  type        = list(string)
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
 }
 
 variable "wg_client_public_keys" {
-  type = "list"
+  type        = list(string)
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
 variable "env" {
-  default = "prod"
+  default     = "prod"
   description = "The name of environment for WireGuard. Used to differentiate multiple deployments"
 }
+
