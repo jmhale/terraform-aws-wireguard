@@ -24,6 +24,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`eip_id`|`string`|Optional|The EIP ID to which the vpn server will attach.|
 |`target_group_arns`|`string`|Optional|The Loadbalancer Target Group to which the vpn server ASG will attach.|
 |`associate_public_ip_address`|`boolean`|Optional - defaults to `true`|Whether or not to associate a public ip.|
+|`additional_security_group_ids`|`list`|Optional - empty| Used to allow added access to reach the WG server or allow loadbalanced tests.|
 |`wg_server_net`|`cidr range`|Yes|The server net - all wg_client_public_keys entries need to be within this net .|
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 
@@ -56,13 +57,14 @@ module "wireguard" {
 ## ELB/private subnet usage
 ```
 module "wireguard" {
-  source                      = "git@github.com:jmhale/terraform-wireguard.git"
-  ssh_key_id                  = "ssh-key-id-0987654"
-  vpc_id                      = "vpc-01234567"
-  subnet_ids                  = ["subnet-76543210"]
-  target_group_arns           = ["arn:aws:elasticloadbalancing:eu-west-1:123456789:targetgroup/wireguard-prod/123456789"]
-  associate_public_ip_address = false
-  wg_server_net               = "192.168.2.1/24" # client IPs must exist in this net
+  source                        = "git@github.com:jmhale/terraform-wireguard.git"
+  ssh_key_id                    = "ssh-key-id-0987654"
+  vpc_id                        = "vpc-01234567"
+  additional_security_group_ids = ["sg-123456789"]
+  subnet_ids                    = ["subnet-76543210"]
+  target_group_arns             = ["arn:aws:elasticloadbalancing:eu-west-1:123456789:targetgroup/wireguard-prod/123456789"]
+  associate_public_ip_address   = false
+  wg_server_net                 = "192.168.2.1/24" # client IPs must exist in this net
   wg_client_public_keys = [
     {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},
     {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
