@@ -12,12 +12,12 @@ variable "ami_id" {
 }
 
 variable "public_subnet_ids" {
-  type        = list(string)
+  type        = list
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
 }
 
 variable "wg_client_public_keys" {
-  type        = list(string)
+  type        = list
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
