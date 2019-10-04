@@ -36,6 +36,12 @@ variable "associate_public_ip_address" {
   description = "get a public address or not, use with eip, but set false if the vpn server sits on a private net behidn elb"
 }
 
+variable "additional_security_group_ids" {
+  type        = list(string)
+  default     = [""]
+  description = "Additional security groups if provided, default empty"
+}
+
 variable "target_group_arns" {
   type        = list(string)
   default     = null

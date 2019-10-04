@@ -34,6 +34,14 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+locals {
+  sg_wireguard_external = sort([aws_security_group.sg_wireguard_external.id])
+}
+
+locals {
+  security_groups_ids = concat(var.additional_security_group_ids, local.sg_wireguard_external)
+}
+
 resource "aws_launch_configuration" "wireguard_launch_config" {
   name_prefix                 = "wireguard-${var.env}-lc-"
   image_id                    = data.aws_ami.ubuntu.id
@@ -41,7 +49,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   key_name                    = var.ssh_key_id
   iam_instance_profile        = aws_iam_instance_profile.wireguard_profile.name
   user_data                   = data.template_file.user_data.rendered
-  security_groups             = [aws_security_group.sg_wireguard_external.id]
+  security_groups             = local.security_groups_ids
   associate_public_ip_address = var.associate_public_ip_address
 
   lifecycle {
@@ -81,4 +89,3 @@ resource "aws_autoscaling_group" "wireguard_asg" {
     },
   ]
 }
-
