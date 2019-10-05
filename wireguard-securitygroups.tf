@@ -58,4 +58,3 @@ resource "aws_security_group" "sg_wireguard_admin" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-

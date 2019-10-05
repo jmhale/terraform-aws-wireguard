@@ -7,7 +7,17 @@ variable "instance_type" {
   description = "The machine type to launch, some machines may offer higher throughput for higher use cases."
 }
 
-variable "wg_server_count" {
+variable "asg_min_size" {
+  default = 1
+  description = "We may want more than one machine in a scaling group, but 1 is recommended."
+}
+
+variable "asg_desired_capacity" {
+  default = 1
+  description = "We may want more than one machine in a scaling group, but 1 is recommended."
+}
+
+variable "asg_max_size" {
   default = 1
   description = "We may want more than one machine in a scaling group, but 1 is recommended."
 }

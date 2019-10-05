@@ -45,7 +45,7 @@ locals {
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
-  name_prefix                 = "wireguard-${var.env}-lc-"
+  name_prefix                 = "wireguard-${var.env}-"
   image_id                    = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
@@ -60,14 +60,16 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name_prefix          = "wireguard-${var.env}-asg-"
-  max_size             = var.wg_server_count
-  min_size             = var.wg_server_count
-  launch_configuration = aws_launch_configuration.wireguard_launch_config.name
-  vpc_zone_identifier  = var.subnet_ids
-  health_check_type    = "EC2"
-  termination_policies = ["OldestInstance"]
-  target_group_arns    = var.target_group_arns
+  name                  = "${aws_launch_configuration.wireguard_launch_config.name}"
+  launch_configuration  = aws_launch_configuration.wireguard_launch_config.name
+  min_size              = var.asg_min_size
+  desired_capacity      = var.asg_desired_capacity
+  max_size              = var.asg_max_size
+  wait_for_elb_capacity = var.asg_desired_capacity
+  vpc_zone_identifier   = var.subnet_ids
+  health_check_type     = "EC2"
+  termination_policies  = ["OldestLaunchConfiguration","OldestInstance"]
+  target_group_arns     = var.target_group_arns
 
   lifecycle {
     create_before_destroy = true
@@ -76,12 +78,17 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   tags = [
     {
       key                 = "Name"
-      value               = "wireguard-${var.env}"
+      value               = "${aws_launch_configuration.wireguard_launch_config.name}"
       propagate_at_launch = true
     },
     {
       key                 = "Project"
       value               = "wireguard"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "env"
+      value               = "${var.env}"
       propagate_at_launch = true
     },
     {
