@@ -98,3 +98,4 @@ resource "aws_autoscaling_group" "wireguard_asg" {
     },
   ]
 }
+
