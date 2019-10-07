@@ -65,7 +65,6 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   min_size              = var.asg_min_size
   desired_capacity      = var.asg_desired_capacity
   max_size              = var.asg_max_size
-  wait_for_elb_capacity = var.asg_desired_capacity
   vpc_zone_identifier   = var.subnet_ids
   health_check_type     = "EC2"
   termination_policies  = ["OldestLaunchConfiguration","OldestInstance"]
@@ -98,4 +97,3 @@ resource "aws_autoscaling_group" "wireguard_asg" {
     },
   ]
 }
-
