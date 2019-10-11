@@ -30,7 +30,8 @@ Before using this module, you'll need to generate a key pair for your server and
 |`asg_max_size`|`integer`|Optional|Number of VPN servers to permit maximum, only makes sense in loadbalanced scenario.|
 |`instance_type`|`string`|Optional|Size of VPN server, defaults to t2.micro|
 |`wg_server_net`|`cidr range`|Yes|The server net - all wg_client_public_keys entries need to be within this net .|
-|`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
+|`wg_client_public_keys`|`list`|Yes|List of maps of client IPs and public keys. See Usage for details.|
+|`wg_persistent_keepalive`|`integer`|Optional|Regularity of Keepalives, useful for NAT stability. Defaults to 25.|
 
 Please see the following examples to understand usage with the relevant options..
 
