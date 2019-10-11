@@ -20,18 +20,19 @@ Before using this module, you'll need to generate a key pair for your server and
 |`subnet_ids`|`list`|Yes|A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list.|
 |`ssh_key_id`|`string`|Yes|A SSH public key ID to add to the VPN instance.|
 |`vpc_id`|`string`|Yes|The VPC ID in which Terraform will launch the resources.|
-|`env`|`string`|No. Defaults to "prod"|The name of environment for WireGuard. Used to differentiate multiple deployments.|
-|`eip_id`|`string`|Optional|The EIP ID to which the vpn server will attach.|
+|`env`|`string`|Optional - defaults to `prod`|The name of environment for WireGuard. Used to differentiate multiple deployments.|
+|`eip_id`|`string`|Optional|The EIP ID to which the VPN server will attach. Useful for avoiding changing IPs.|
 |`target_group_arns`|`string`|Optional|The Loadbalancer Target Group to which the vpn server ASG will attach.|
 |`associate_public_ip_address`|`boolean`|Optional - defaults to `true`|Whether or not to associate a public ip.|
-|`additional_security_group_ids`|`list`|Optional - empty| Used to allow added access to reach the WG server or allow loadbalanced tests.|
-|`asg_min_size`|`integer`|Optional|Number of VPN servers to permit minimum, only makes sense in loadbalanced scenario.|
-|`asg_desired_capacity`|`integer`|Optional|Number of VPN servers to maintain, only makes sense in loadbalanced scenario.|
-|`asg_max_size`|`integer`|Optional|Number of VPN servers to permit maximum, only makes sense in loadbalanced scenario.|
-|`instance_type`|`string`|Optional|Size of VPN server, defaults to t2.micro|
-|`wg_server_net`|`cidr range`|Yes|The server net - all wg_client_public_keys entries need to be within this net .|
-|`wg_client_public_keys`|`list`|Yes|List of maps of client IPs and public keys. See Usage for details.|
-|`wg_persistent_keepalive`|`integer`|Optional|Regularity of Keepalives, useful for NAT stability. Defaults to 25.|
+|`additional_security_group_ids`|`list`|Optional|Used to allow added access to reach the WG servers or allow loadbalancer health checks.|
+|`asg_min_size`|`integer`|Optional - default to `1`|Number of VPN servers to permit minimum, only makes sense in loadbalanced scenario.|
+|`asg_desired_capacity`|`integer`|Optional - default to `1`|Number of VPN servers to maintain, only makes sense in loadbalanced scenario.|
+|`asg_max_size`|`integer`|Optional - default to `1`|Number of VPN servers to permit maximum, only makes sense in loadbalanced scenario.|
+|`instance_type`|`string`|Optional - defaults to `t2.micro`|Instance Size of VPN server.|
+|`wg_server_net`|`cidr address and netmask`|Yes|The server ip allocation and net - wg_client_public_keys entries MUST be in this netmask range.|
+|`wg_client_public_keys`|`list`|Yes|List of maps of client IP/netmasks and public keys. See Usage for details. See Examples for formatting.|
+|`wg_server_port`|`integer`|Optional - defaults to `51820`|Port to run wireguard service on, wireguard standard is 51820.|
+|`wg_persistent_keepalive`|`integer`|Optional - defaults to `25`|Regularity of Keepalives, useful for NAT stability.|
 
 Please see the following examples to understand usage with the relevant options..
 
@@ -52,9 +53,9 @@ module "wireguard" {
   eip_id                = "${aws_eip.wireguard.id}"
   wg_server_net         = "192.168.2.1/24" # client IPs MUST exist in this net
   wg_client_public_keys = [
-    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="}, # make sure these are correct, wireguard is sensitive to bad config
-    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
-    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="}, # make sure these are correct
+    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="}, # wireguard is sensitive
+    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="}, # to bad configuration
   ]
 }
 ```
@@ -74,9 +75,9 @@ module "wireguard" {
   associate_public_ip_address   = false # we don't want eip, we want all our traffic out of a single NAT for whitelisting simplicity
   wg_server_net                 = "192.168.2.1/24" # client IPs MUST exist in this net
   wg_client_public_keys = [
-    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="}, # make sure these are correct, wireguard is sensitive to bad config
-    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
-    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="}, # make sure these are correct
+    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="}, # wireguard is sensitive
+    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="}, # to bad configuration
   ]
 }
 
