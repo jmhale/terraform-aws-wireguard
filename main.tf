@@ -49,7 +49,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   image_id                    = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
-  iam_instance_profile        = aws_iam_instance_profile.wireguard_profile.name
+  iam_instance_profile        = (var.eip_id != "disabled" ? aws_iam_instance_profile.wireguard_profile[0].name : null)
   user_data                   = data.template_file.user_data.rendered
   security_groups             = local.security_groups_ids
   associate_public_ip_address = var.associate_public_ip_address
