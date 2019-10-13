@@ -53,7 +53,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   iam_instance_profile        = (var.eip_id != "disabled" ? aws_iam_instance_profile.wireguard_profile[0].name : null)
   user_data                   = data.template_file.user_data.rendered
   security_groups             = local.security_groups_ids
-  associate_public_ip_address = var.associate_public_ip_address
+  associate_public_ip_address = (var.eip_id != "disabled" ? true : false)
 
   lifecycle {
     create_before_destroy = true

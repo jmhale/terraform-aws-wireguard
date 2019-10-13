@@ -56,11 +56,6 @@ variable "eip_id" {
   description = "If we detect the default 'disabled' we avoid the EIP switching code in user-data on wg server startup, if an EIP ID is provided the instance will attempt to switch EIP."
 }
 
-variable "associate_public_ip_address" {
-  default     = true
-  description = "get a public address or not, use with eip, but set false if the vpn server sits on a private net behidn elb"
-}
-
 variable "additional_security_group_ids" {
   type        = list(string)
   default     = [""]
