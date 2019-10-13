@@ -61,15 +61,15 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name                  = "${aws_launch_configuration.wireguard_launch_config.name}"
-  launch_configuration  = aws_launch_configuration.wireguard_launch_config.name
-  min_size              = var.asg_min_size
-  desired_capacity      = var.asg_desired_capacity
-  max_size              = var.asg_max_size
-  vpc_zone_identifier   = var.subnet_ids
-  health_check_type     = "EC2"
-  termination_policies  = ["OldestLaunchConfiguration","OldestInstance"]
-  target_group_arns     = var.target_group_arns
+  name                 = "${aws_launch_configuration.wireguard_launch_config.name}"
+  launch_configuration = aws_launch_configuration.wireguard_launch_config.name
+  min_size             = var.asg_min_size
+  desired_capacity     = var.asg_desired_capacity
+  max_size             = var.asg_max_size
+  vpc_zone_identifier  = var.subnet_ids
+  health_check_type    = "EC2"
+  termination_policies = ["OldestLaunchConfiguration", "OldestInstance"]
+  target_group_arns    = var.target_group_arns
 
   lifecycle {
     create_before_destroy = true

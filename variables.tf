@@ -3,22 +3,22 @@ variable "ssh_key_id" {
 }
 
 variable "instance_type" {
-  default = "t2.micro"
+  default     = "t2.micro"
   description = "The machine type to launch, some machines may offer higher throughput for higher use cases."
 }
 
 variable "asg_min_size" {
-  default = 1
+  default     = 1
   description = "We may want more than one machine in a scaling group, but 1 is recommended."
 }
 
 variable "asg_desired_capacity" {
-  default = 1
+  default     = 1
   description = "We may want more than one machine in a scaling group, but 1 is recommended."
 }
 
 variable "asg_max_size" {
-  default = 1
+  default     = 1
   description = "We may want more than one machine in a scaling group, but 1 is recommended."
 }
 
@@ -32,7 +32,7 @@ variable "subnet_ids" {
 }
 
 variable "wg_client_public_keys" {
-# type        = map(string)
+  # type        = map(string)
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
@@ -48,7 +48,7 @@ variable "wg_server_port" {
 
 variable "wg_persistent_keepalive" {
   default     = 25
-  description = "Persistent Keepalive - useful for helping connectiona stability over NATs"
+  description = "Persistent Keepalive - useful for helping connection stability over NATs"
 }
 
 variable "eip_id" {
