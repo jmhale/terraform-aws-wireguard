@@ -72,3 +72,8 @@ variable "env" {
   default     = "prod"
   description = "The name of environment for WireGuard. Used to differentiate multiple deployments"
 }
+
+variable "wg_server_private_key_param" {
+  default     = "/wireguard/wg-server-private-key"
+  description = "The SSM parameter containing the WG server private key"
+}
