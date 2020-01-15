@@ -77,3 +77,8 @@ variable "wg_server_private_key_param" {
   default     = "/wireguard/wg-server-private-key"
   description = "The SSM parameter containing the WG server private key"
 }
+
+variable "ami_id" {
+  default     = null # we check for this and use a data provider since we can't use it here
+  description = "The AWS AMI to use for the WG server, defaults to the latest Ubuntu 16.04 AMI if not specified."
+}
