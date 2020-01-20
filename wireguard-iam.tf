@@ -35,11 +35,11 @@ resource "aws_iam_role" "wireguard_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "wireguard_roleattach" {
-  role               = aws_iam_role.wireguard_role[0].name
-  policy_arn         = aws_iam_policy.wireguard_policy[0].arn
+  role               = aws_iam_role.wireguard_role.name
+  policy_arn         = aws_iam_policy.wireguard_policy.arn
 }
 
 resource "aws_iam_instance_profile" "wireguard_profile" {
   name               = "tf-wireguard-${var.env}"
-  role               = aws_iam_role.wireguard_role[0].name
+  role               = aws_iam_role.wireguard_role.name
 }
