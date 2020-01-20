@@ -52,7 +52,6 @@ variable "wg_persistent_keepalive" {
 }
 
 variable "eip_id" {
-  default     = "disabled"
   description = "If we detect the default 'disabled' we avoid the EIP switching code in user-data on wg server startup, if an EIP ID is provided the instance will attempt to switch EIP."
 }
 
