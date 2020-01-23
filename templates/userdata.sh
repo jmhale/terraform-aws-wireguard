@@ -2,7 +2,11 @@
 add-apt-repository "ppa:wireguard/wireguard"
 apt-get update -y
 apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
-apt-get install -y wireguard-dkms wireguard-tools awscli
+apt-get install -y wireguard-dkms wireguard-tools python3
+
+# aws cli
+pip3 install --upgrade --user awscli
+export PATH=/root/.local/bin:$PATH
 
 # fetch the VPN server private key
 wg_server_private_key=$(aws ssm get-parameter \
