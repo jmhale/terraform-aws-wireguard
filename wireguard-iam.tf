@@ -19,6 +19,17 @@ data "aws_iam_policy_document" "wireguard_policy_doc" {
 
     resources = ["*"]
   }
+
+  statement {
+    actions = [
+      "ssm:GetParameter",
+      "kms:Decrypt"
+    ]
+
+    resources = [
+      data.aws_ssm_parameter.wg_server_private_key.arn
+    ]
+  }
 }
 
 resource "aws_iam_policy" "wireguard_policy" {

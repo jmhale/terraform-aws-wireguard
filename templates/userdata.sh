@@ -4,6 +4,13 @@ apt-get update -y
 apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools awscli
 
+# fetch the VPN server private key
+wg_server_private_key=$(aws ssm get-parameter \
+    --name "${wg_server_private_key_param}" \
+    --with-decryption \
+    --query 'Parameter.Value' \
+    --output text)
+
 cat > /etc/wireguard/wg0.conf <<- EOF
 [Interface]
 Address = ${wg_server_net}

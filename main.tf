@@ -1,12 +1,12 @@
 data "template_file" "user_data" {
-  template = file("${path.module}/templates/user-data.txt")
+  template = file("${path.module}/templates/userdata.sh")
 
   vars = {
-    wg_server_private_key = data.aws_ssm_parameter.wg_server_private_key.value
-    wg_server_net         = var.wg_server_net
-    wg_server_port        = var.wg_server_port
-    peers                 = join("\n", data.template_file.wg_client_data_json.*.rendered)
-    eip_id                = var.eip_id
+    wg_server_private_key_param = data.aws_ssm_parameter.wg_server_private_key.name
+    wg_server_net               = var.wg_server_net
+    wg_server_port              = var.wg_server_port
+    peers                       = join("\n", data.template_file.wg_client_data_json.*.rendered)
+    eip_id                      = var.eip_id
   }
 }
 
