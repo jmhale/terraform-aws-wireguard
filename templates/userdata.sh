@@ -11,10 +11,10 @@ wg_server_private_key=$(aws ssm get-parameter \
     --query 'Parameter.Value' \
     --output text)
 
-cat > /etc/wireguard/wg0.conf <<- EOF
+cat << EOF > /etc/wireguard/wg0.conf
 [Interface]
 Address = ${wg_server_net}
-PrivateKey = $${wg_server_private_key}
+PrivateKey = $wg_server_private_key
 ListenPort = ${wg_server_port}
 PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
