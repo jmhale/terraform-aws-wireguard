@@ -7,6 +7,16 @@ apt-get install -y wireguard-dkms wireguard-tools python3-pip
 # aws cli
 pip3 install --upgrade --user awscli
 export PATH=/root/.local/bin:$PATH
+mkdir /root/.aws/
+touch /root/.aws/config
+cat << 'EOF' > /root/.aws/config
+[profile wireguard]
+role_arn = ${role_arn}
+source_profile = default
+
+[default]
+region=${region}
+EOF
 
 # fetch the VPN server private key
 wg_server_private_key=$(aws ssm get-parameter \

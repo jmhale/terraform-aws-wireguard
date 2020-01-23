@@ -1,7 +1,11 @@
+data "aws_region" "current" {}
+
 data "template_file" "user_data" {
   template = file("${path.module}/templates/userdata.sh")
 
   vars = {
+    region                      = data.aws_region.current.name
+    role_arn                    = aws_iam_role.wireguard_role.arn
     wg_server_private_key_param = data.aws_ssm_parameter.wg_server_private_key.name
     wg_server_net               = var.wg_server_net
     wg_server_port              = var.wg_server_port
