@@ -33,7 +33,7 @@ resource "aws_security_group" "wireguard_ssh_check" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = 192.168.1.0/24 # range that covers public subnet_ids, aws_lb will check the hosts from these ranges
+    cidr_blocks = ["192.168.1.0/24"] # range that covers public subnet_ids, aws_lb will check the hosts from these ranges
   }
 }
 
