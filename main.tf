@@ -61,7 +61,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name                 = "${aws_launch_configuration.wireguard_launch_config.name}"
+  name                 = aws_launch_configuration.wireguard_launch_config.name
   launch_configuration = aws_launch_configuration.wireguard_launch_config.name
   min_size             = var.asg_min_size
   desired_capacity     = var.asg_desired_capacity
