@@ -33,6 +33,8 @@ Before using this module, you'll need to generate a key pair for your server and
 |`wg_client_public_keys`|`list`|Yes|List of maps of client IP/netmasks and public keys. See Usage for details. See Examples for formatting.|
 |`wg_server_port`|`integer`|Optional - defaults to `51820`|Port to run wireguard service on, wireguard standard is 51820.|
 |`wg_persistent_keepalive`|`integer`|Optional - defaults to `25`|Regularity of Keepalives, useful for NAT stability.|
+|`wg_server_private_key_param`|`string`|Optional - defaults to `/wireguard/wg-server-private-key`|The Parameter Store key to use for the VPN server Private Key.|
+|`ami_id`|`string`|Optional - defaults to the newest Ubuntu 16.04 AMI|AMI to use for the VPN server.|
 
 Please see the following examples to understand usage with the relevant options..
 

@@ -43,12 +43,12 @@ variable "wg_server_net" {
 
 variable "wg_server_port" {
   default     = 51820
-  description = "Port for the vpn server"
+  description = "Port for the vpn server."
 }
 
 variable "wg_persistent_keepalive" {
   default     = 25
-  description = "Persistent Keepalive - useful for helping connection stability over NATs"
+  description = "Persistent Keepalive - useful for helping connection stability over NATs."
 }
 
 variable "eip_id" {
@@ -59,16 +59,26 @@ variable "eip_id" {
 variable "additional_security_group_ids" {
   type        = list(string)
   default     = [""]
-  description = "Additional security groups if provided, default empty"
+  description = "Additional security groups if provided, default empty."
 }
 
 variable "target_group_arns" {
   type        = list(string)
   default     = null
-  description = "Running a scaling group behind an LB requires this variable, default null means it won't be included if not set"
+  description = "Running a scaling group behind an LB requires this variable, default null means it won't be included if not set."
 }
 
 variable "env" {
   default     = "prod"
-  description = "The name of environment for WireGuard. Used to differentiate multiple deployments"
+  description = "The name of environment for WireGuard. Used to differentiate multiple deployments."
+}
+
+variable "wg_server_private_key_param" {
+  default     = "/wireguard/wg-server-private-key"
+  description = "The SSM parameter containing the WG server private key."
+}
+
+variable "ami_id" {
+  default     = null # we check for this and use a data provider since we can't use it here
+  description = "The AWS AMI to use for the WG server, defaults to the latest Ubuntu 16.04 AMI if not specified."
 }

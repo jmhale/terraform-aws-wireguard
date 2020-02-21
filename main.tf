@@ -47,7 +47,7 @@ locals {
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
   name_prefix                 = "wireguard-${var.env}-"
-  image_id                    = data.aws_ami.ubuntu.id
+  image_id                    = var.ami_id == null ? data.aws_ami.ubuntu.id : var.ami_id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
   iam_instance_profile        = (var.eip_id != "disabled" ? aws_iam_instance_profile.wireguard_profile[0].name : null)
@@ -61,7 +61,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name                 = "${aws_launch_configuration.wireguard_launch_config.name}"
+  name                 = aws_launch_configuration.wireguard_launch_config.name
   launch_configuration = aws_launch_configuration.wireguard_launch_config.name
   min_size             = var.asg_min_size
   desired_capacity     = var.asg_desired_capacity
@@ -78,7 +78,7 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   tags = [
     {
       key                 = "Name"
-      value               = "${aws_launch_configuration.wireguard_launch_config.name}"
+      value               = aws_launch_configuration.wireguard_launch_config.name
       propagate_at_launch = true
     },
     {
@@ -88,7 +88,7 @@ resource "aws_autoscaling_group" "wireguard_asg" {
     },
     {
       key                 = "env"
-      value               = "${var.env}"
+      value               = var.env
       propagate_at_launch = true
     },
     {
