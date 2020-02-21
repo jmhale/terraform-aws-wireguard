@@ -38,10 +38,10 @@ resource "aws_security_group" "wireguard_ssh_check" {
 }
 
 resource "aws_lb_target_group" "wireguard" {
-  name_prefix          = "wireguard"
   port                 = 51820
   protocol             = "UDP"
   vpc_id               = "vpc-01234567"
+  name_prefix = "wg"
 
   health_check {
     port     = 22 # make sure to add additional_security_group_ids with a rule to allow ssh from the loadbalancer range so this test passes.
