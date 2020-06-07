@@ -21,7 +21,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`ssh_key_id`|`string`|Yes|A SSH public key ID to add to the VPN instance.|
 |`vpc_id`|`string`|Yes|The VPC ID in which Terraform will launch the resources.|
 |`env`|`string`|Optional - defaults to `prod`|The name of environment for WireGuard. Used to differentiate multiple deployments.|
-|`eip_id`|`string`|Optional|The EIP ID to which the VPN server will attach. Useful for avoiding changing IPs.|
+|`eip_id`|`string`|Optional|The [Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) ID to which the VPN server will attach. Useful for avoiding changing IPs.|
 |`target_group_arns`|`string`|Optional|The Loadbalancer Target Group to which the vpn server ASG will attach.|
 |`additional_security_group_ids`|`list`|Optional|Used to allow added access to reach the WG servers or allow loadbalancer health checks.|
 |`asg_min_size`|`integer`|Optional - default to `1`|Number of VPN servers to permit minimum, only makes sense in loadbalanced scenario.|
@@ -39,11 +39,11 @@ Before using this module, you'll need to generate a key pair for your server and
 
 Please see the following examples to understand usage with the relevant options.
 
-### Simple EIP/public subnet usage
+### Simple Elastic IP/public subnet usage
 
 See [examples/simple_eip/main.tf](examples/simple_eip/main.tf) file.
 
-### Complex ELB/private subnet usage
+### Complex Elastic Load Balancer/private subnet usage
 
 See [examples/complex_elb/main.tf](examples/complex_elb/main.tf) file.
 
