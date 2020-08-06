@@ -1,5 +1,4 @@
 #!/bin/bash -v
-add-apt-repository "ppa:wireguard/wireguard"
 apt-get update -y
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools awscli
