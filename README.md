@@ -34,6 +34,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`wg_persistent_keepalive`|`integer`|Optional - defaults to `25`|Regularity of Keepalives, useful for NAT stability.|
 |`wg_server_private_key_param`|`string`|Optional - defaults to `/wireguard/wg-server-private-key`|The Parameter Store key to use for the VPN server Private Key.|
 |`ami_id`|`string`|Optional - defaults to the newest Ubuntu 16.04 AMI|AMI to use for the VPN server.|
+|`forward_traffic`|`string`|Optional - defaults to false|Will this server be used to forward trafic to a local network.|
 
 ## Examples
 

@@ -82,3 +82,8 @@ variable "ami_id" {
   default     = null # we check for this and use a data provider since we can't use it here
   description = "The AWS AMI to use for the WG server, defaults to the latest Ubuntu 16.04 AMI if not specified."
 }
+
+variable "forward_traffic" {
+  default     = "false"
+  description = "Will this WireGuard server forward traffic to other hosts on the network?"
+}
