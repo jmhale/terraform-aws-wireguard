@@ -1,7 +1,9 @@
 #!/bin/bash -v
+export DEBIAN_FRONTEND=noninteractive
+
 add-apt-repository "ppa:wireguard/wireguard"
 apt-get update -y
-apt-get upgrade -y
+apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools python3-pip
 
 # aws cli
