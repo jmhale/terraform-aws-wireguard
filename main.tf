@@ -8,6 +8,7 @@ data "template_file" "user_data" {
     peers                 = join("\n", data.template_file.wg_client_data_json.*.rendered)
     eip_id                = var.eip_id
     wg_server_interface   = var.wg_server_interface
+    forward_traffic       = var.forward_traffic
   }
 }
 

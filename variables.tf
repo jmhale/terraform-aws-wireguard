@@ -87,3 +87,8 @@ variable "wg_server_interface" {
   default     = "eth0"
   description = "The default interface to forward network traffic to."
 }
+
+variable "forward_traffic" {
+  default     = "false"
+  description = "Will this WireGuard server forward traffic to other hosts on the network?"
+}
