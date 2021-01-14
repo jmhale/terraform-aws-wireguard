@@ -5,7 +5,7 @@ resource "aws_security_group" "sg_wireguard_external" {
 
   tags = {
     Name       = "wireguard-${var.env}-external"
-    Project    = "wireguard"
+    project    = var.project
     tf-managed = "True"
     env        = var.env
   }
@@ -32,7 +32,7 @@ resource "aws_security_group" "sg_wireguard_admin" {
 
   tags = {
     Name       = "wireguard-${var.env}-admin"
-    Project    = "vpn"
+    project    = var.project
     tf-managed = "True"
     env        = var.env
   }

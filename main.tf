@@ -84,8 +84,8 @@ resource "aws_autoscaling_group" "wireguard_asg" {
       propagate_at_launch = true
     },
     {
-      key                 = "Project"
-      value               = "wireguard"
+      key                 = "project"
+      value               = var.project
       propagate_at_launch = true
     },
     {
