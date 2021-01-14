@@ -3,13 +3,17 @@ apt-get update -y
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools awscli
 
+# Retrieve this instead of hard-coding 'eth0'
+# If Elastic Network Adapter is enabled, it might be 'ens5' or other
+DEFAULT_NETWORK_IFACE=$(route | grep '^default' | grep -o '[^ ]*$')
+
 cat > /etc/wireguard/wg0.conf <<- EOF
 [Interface]
 Address = ${wg_server_net}
 PrivateKey = ${wg_server_private_key}
 ListenPort = ${wg_server_port}
-PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${wg_server_interface} -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${wg_server_interface} -j MASQUERADE
+PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o $DEFAULT_NETWORK_IFACE -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o $DEFAULT_NETWORK_IFACE -j MASQUERADE
 
 ${peers}
 EOF
