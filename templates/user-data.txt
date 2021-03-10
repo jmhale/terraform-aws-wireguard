@@ -1,7 +1,6 @@
 #!/bin/bash -v
-add-apt-repository "ppa:wireguard/wireguard"
 apt-get update -y
-apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools awscli
 
 cat > /etc/wireguard/wg0.conf <<- EOF
@@ -9,8 +8,8 @@ cat > /etc/wireguard/wg0.conf <<- EOF
 Address = ${wg_server_net}
 PrivateKey = ${wg_server_private_key}
 ListenPort = ${wg_server_port}
-PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${wg_server_interface} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${wg_server_interface} -j MASQUERADE
 
 ${peers}
 EOF
