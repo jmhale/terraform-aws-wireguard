@@ -9,10 +9,22 @@ module "wireguard" {
   asg_desired_capacity          = 2                # we want two servers running most of the time
   asg_max_size                  = 5                # this cleanly permits us to allow rolling updates, growing and shrinking
   wg_server_net                 = "192.168.2.1/24" # client IPs MUST exist in this net
-  wg_client_public_keys = [
-    { "192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU=" }, # make sure these are correct
-    { "192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q=" }, # wireguard is sensitive
-    { "192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E=" }, # to bad configuration
+  wg_clients = [
+    {
+      name       = "example1"
+      public_key = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="
+      client_ip  = "192.168.2.2/32"
+    },
+    {
+      name       = "example2"
+      public_key = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="
+      client_ip  = "192.168.2.3/32"
+    },
+    {
+      name       = "example3"
+      public_key = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="
+      client_ip  = "192.168.2.4/32"
+    },
   ]
 }
 

@@ -12,7 +12,7 @@ Before using this module, you'll need to generate a key pair for your server and
   - `wg genkey | tee server-privatekey | wg pubkey > server-publickey`
 - Add the server private key to the AWS SSM parameter: `/wireguard/wg-server-private-key`
   - `aws ssm put-parameter --name /wireguard/wg-server-private-key --type SecureString --value $ServerPrivateKeyValue`
-- Add each client's public key, along with the next available IP address as a key:value pair to the wg_client_public_keys map. See Usage for details.
+- Add each client's public key, along with the next available IP address to the wg_clients list. See Usage for details.
 
 ## Variables
 | Variable Name | Type | Required |Description |
@@ -29,8 +29,8 @@ Before using this module, you'll need to generate a key pair for your server and
 |`asg_desired_capacity`|`integer`|Optional - default to `1`|Number of VPN servers to maintain, only makes sense in loadbalanced scenario.|
 |`asg_max_size`|`integer`|Optional - default to `1`|Number of VPN servers to permit maximum, only makes sense in loadbalanced scenario.|
 |`instance_type`|`string`|Optional - defaults to `t2.micro`|Instance Size of VPN server.|
-|`wg_server_net`|`cidr address and netmask`|Yes|The server ip allocation and net - wg_client_public_keys entries MUST be in this netmask range.|
-|`wg_client_public_keys`|`list`|Yes|List of maps of client IP/netmasks and public keys. See Usage for details. See Examples for formatting.|
+|`wg_server_net`|`cidr address and netmask`|Yes|The server ip allocation and net - wg_clients entries MUST be in this netmask range.|
+|`wg_clients`|`list`|Yes|List of client objects with IP and public key. See Usage for details. See Examples for formatting.|
 |`wg_server_port`|`integer`|Optional - defaults to `51820`|Port to run wireguard service on, wireguard standard is 51820.|
 |`wg_persistent_keepalive`|`integer`|Optional - defaults to `25`|Regularity of Keepalives, useful for NAT stability.|
 |`wg_server_private_key_param`|`string`|Optional - defaults to `/wireguard/wg-server-private-key`|The Parameter Store key to use for the VPN server Private Key.|

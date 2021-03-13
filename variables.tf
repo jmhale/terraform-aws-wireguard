@@ -31,9 +31,9 @@ variable "subnet_ids" {
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
 }
 
-variable "wg_client_public_keys" {
-  # type        = map(string)
-  description = "List of maps of client IPs and public keys. See Usage in README for details."
+variable "wg_clients" {
+  type        = list(object({ name=string, public_key=string, client_ip=string }))
+  description = "List of client objects with IP and public key. See Usage in README for details."
 }
 
 variable "wg_server_net" {

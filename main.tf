@@ -14,11 +14,12 @@ data "template_file" "user_data" {
 
 data "template_file" "wg_client_data_json" {
   template = file("${path.module}/templates/client-data.tpl")
-  count    = length(var.wg_client_public_keys)
+  count    = length(var.wg_clients)
 
   vars = {
-    client_pub_key       = element(values(var.wg_client_public_keys[count.index]), 0)
-    client_ip            = element(keys(var.wg_client_public_keys[count.index]), 0)
+    client_name          = var.wg_clients[count.index].name
+    client_pub_key       = var.wg_clients[count.index].public_key
+    client_ip            = var.wg_clients[count.index].client_ip
     persistent_keepalive = var.wg_persistent_keepalive
   }
 }
