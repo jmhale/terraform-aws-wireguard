@@ -51,9 +51,15 @@ variable "wg_persistent_keepalive" {
   description = "Persistent Keepalive - useful for helping connection stability over NATs."
 }
 
+variable "use_eip" {
+  type        = bool
+  default     = false
+  description = "Whether to enable Elastic IP switching code in user-data on wg server startup. If true, eip_id must also be set to the ID of the Elastic IP."
+}
+
 variable "eip_id" {
-  default     = "disabled"
-  description = "If we detect the default 'disabled' we avoid the EIP switching code in user-data on wg server startup, if an EIP ID is provided the instance will attempt to switch EIP."
+  type        = string
+  description = "ID of the Elastic IP to use, when use_eip is enabled."
 }
 
 variable "additional_security_group_ids" {
