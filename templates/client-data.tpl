@@ -1,4 +1,8 @@
+%{ for keypair in client_pub_keys }
+%{ for ip, pub_key in keypair }
 [Peer]
-PublicKey = ${client_pub_key}
-AllowedIPs = ${client_ip}
+PublicKey = ${pub_key}
+AllowedIPs = ${ip}
 PersistentKeepalive = ${persistent_keepalive}
+%{ endfor ~}
+%{ endfor ~}
