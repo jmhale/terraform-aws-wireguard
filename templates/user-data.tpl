@@ -15,7 +15,7 @@ ${peers}
 EOF
 
 # we go with the eip if it is provided
-if [ "${eip_id}" != "disabled" ]; then
+if [ "${use_eip}" != "disabled" ]; then
   export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
   export REGION=$(curl -fsq http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
   aws --region $${REGION} ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
