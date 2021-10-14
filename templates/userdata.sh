@@ -7,7 +7,7 @@ apt-get upgrade -y -o Dpkg::Options::="--force-confnew"
 apt-get install -y wireguard-dkms wireguard-tools python3-pip
 
 # aws cli
-pip3 install --upgrade --user rsa awscli
+pip3 install --upgrade --user rsa awscli==1.20.54
 export PATH=/root/.local/bin:$PATH
 mkdir /root/.aws/
 touch /root/.aws/config
