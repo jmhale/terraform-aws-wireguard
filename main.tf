@@ -2,13 +2,13 @@ data "template_file" "user_data" {
   template = file("${path.module}/templates/user-data.txt")
 
   vars = {
-    wg_server_private_key = data.aws_ssm_parameter.wg_server_private_key.value
-    wg_server_net         = var.wg_server_net
-    wg_server_port        = var.wg_server_port
-    peers                 = join("\n", data.template_file.wg_client_data_json.*.rendered)
-    use_eip               = var.use_eip ? "enabled" : "disabled"
-    eip_id                = var.eip_id
-    wg_server_interface   = var.wg_server_interface
+    wg_server_private_key_param = var.wg_server_private_key_param
+    wg_server_net               = var.wg_server_net
+    wg_server_port              = var.wg_server_port
+    peers                       = join("\n", data.template_file.wg_client_data_json.*.rendered)
+    use_eip                     = var.use_eip ? "enabled" : "disabled"
+    eip_id                      = var.eip_id
+    wg_server_interface         = var.wg_server_interface
   }
 }
 
