@@ -1,5 +1,6 @@
 # terraform
 .terraform
+.terraform.lock*
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfstate.*.backup
