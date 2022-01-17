@@ -10,6 +10,7 @@ data "template_file" "user_data" {
     wg_server_net               = var.wg_server_net
     wg_server_port              = var.wg_server_port
     eip_id                      = var.eip_id
+    peers                       = join("\n", data.template_file.wg_client_data_json.*.rendered)
   }
 }
 
@@ -53,6 +54,7 @@ module "s3_peers_bucket" {
   source = "git@github.com:smartcontractkit/infra-modules.git//aws/s3b?ref=a2c1fc3db306d3f3c5440abf24ba46616e7b44e7"
   name   = var.wireguard_bucket
   region = data.aws_region.current.name
+  vpcs   = ["vpc-04a2871b3c97e4d75"]
 }
 
 resource "aws_s3_bucket_object" "peers_file" {
