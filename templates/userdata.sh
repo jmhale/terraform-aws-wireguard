@@ -35,8 +35,11 @@ ListenPort = ${wg_server_port}
 PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
-${peers}
 EOF
+
+# fetch peers file and concatenate to wg0.conf
+aws s3 cp s3://wireguard-peers.cl/peers.txt /tmp/peers.txt
+cat /tmp/peers.txt >> /etc/wireguard/wg0.conf
 
 # we go with the eip if it is provided
 if [ "${eip_id}" != "disabled" ]; then
