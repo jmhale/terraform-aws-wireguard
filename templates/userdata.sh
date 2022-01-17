@@ -37,8 +37,8 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACC
 
 EOF
 
+echo "${peers_recreate}" > /dev/null #Forces user_data replacement
 # fetch peers file and concatenate to wg0.conf
-echo "${peers}" > /dev/null # This is to make sure that user-data script changes when new users are added, so the launch-config gets replaced.
 aws s3 cp s3://wireguard-peers.cl/peers.txt /tmp/peers.txt
 cat /tmp/peers.txt >> /etc/wireguard/wg0.conf
 
