@@ -9,7 +9,6 @@ data "template_file" "user_data" {
     wg_server_private_key_param = data.aws_ssm_parameter.wg_server_private_key.name
     wg_server_net               = var.wg_server_net
     wg_server_port              = var.wg_server_port
-    peers                       = join("\n", data.template_file.wg_client_data_json.*.rendered)
     eip_id                      = var.eip_id
   }
 }
@@ -47,6 +46,13 @@ locals {
 # clean up and concat the above wireguard default sg with the additional_security_group_ids
 locals {
   security_groups_ids = compact(concat(var.additional_security_group_ids, local.sg_wireguard_external))
+}
+
+# Work around user_data length limit:
+resource "aws_s3_bucket_object" "peers_file" {
+  bucket  = var.wireguard_bucket
+  key     = "peers.txt"
+  content = join("\n", data.template_file.wg_client_data_json.*.rendered)
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
