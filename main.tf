@@ -52,6 +52,7 @@ locals {
 module "s3_peers_bucket" {
   source = "git@github.com:smartcontractkit/infra-modules.git//aws/s3b?ref=a2c1fc3db306d3f3c5440abf24ba46616e7b44e7"
   name   = var.wireguard_bucket
+  region = data.aws_region.current.name
 }
 
 resource "aws_s3_bucket_object" "peers_file" {
