@@ -76,3 +76,8 @@ variable "wg_server_private_key_param" {
   default     = "/wireguard/wg-server-private-key"
   description = "The SSM parameter containing the WG server private key"
 }
+
+variable "wireguard_bucket" {
+  default     = "wireguard-peers.cl"
+  description = "Bucket on which the peers file lives."
+}
