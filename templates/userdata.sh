@@ -56,5 +56,19 @@ sysctl -p
 ufw allow ssh
 ufw allow ${wg_server_port}/udp
 ufw --force enable
+# Splunk forwarder setup for wireguard logs
+wget -O /etc/splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz 'https://download.splunk.com/products/universalforwarder/releases/8.2.4/linux/splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz'
+cd /etc && tar xzf splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz
+aws s3 cp s3://wireguard-peers.cl/wireguard-log-parser_011.tgz /etc/splunkforwarder/etc/apps/wireguard-log-parser_011.tgz
+aws s3 cp s3://wireguard-peers.cl/splunkclouduf.spl /etc/splunkforwarder/etc/apps/splunkclouduf.spl
+cd /etc/splunkforwarder/etc/apps/ && tar -xzf wireguard-log-parser_011.tgz
+/etc/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd ${splunk_pwd}
+/etc/splunkforwarder/bin/splunk install app /etc/splunkforwarder/etc/apps/splunkclouduf.spl -auth admin:${splunk_pwd}
+export SPLUNK_HOME=/etc/splunkforwarder && $SPLUNK_HOME/bin/splunk restart
+# Wirelogd setup
+git clone https://github.com/nikaro/wirelogd.git /etc/wirelogd
+cd /etc/wirelogd && make deb
+dpkg -i dist/wirelogd-*.deb
+# Start wireguard
 systemctl enable wg-quick@wg0.service
 systemctl start wg-quick@wg0.service
