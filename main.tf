@@ -11,6 +11,7 @@ data "template_file" "user_data" {
     wg_server_port              = var.wg_server_port
     eip_id                      = var.eip_id
     peers_recreate              = sha1(join("\n", data.template_file.wg_client_data_json.*.rendered)) # var to force user_data replacement
+    splunk_pwd                  = random_password.splunk_pwd.result
   }
 }
 
@@ -61,6 +62,11 @@ resource "aws_s3_bucket_object" "peers_file" {
   bucket  = var.wireguard_bucket
   key     = "peers.txt"
   content = join("\n", data.template_file.wg_client_data_json.*.rendered)
+}
+
+resource "random_password" "splunk_pwd" {
+  length           = 10
+  special          = false
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
