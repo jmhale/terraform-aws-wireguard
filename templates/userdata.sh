@@ -64,9 +64,10 @@ aws s3 cp s3://wireguard-peers.cl/splunkclouduf.spl /etc/splunkforwarder/etc/app
 cd /etc/splunkforwarder/etc/apps/ && tar -xzf wireguard-log-parser_011.tgz
 /etc/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd ${splunk_pwd}
 /etc/splunkforwarder/bin/splunk install app /etc/splunkforwarder/etc/apps/splunkclouduf.spl -auth admin:${splunk_pwd}
+echo "index = wireguard" >> /etc/splunkforwarder/etc/apps/journald_input/default/inputs.conf
 export SPLUNK_HOME=/etc/splunkforwarder && $SPLUNK_HOME/bin/splunk restart
 # Wirelogd setup
-git clone https://github.com/nikaro/wirelogd.git /etc/wirelogd
+git clone --branch v0.1.3 https://github.com/nikaro/wirelogd.git /etc/wirelogd
 cd /etc/wirelogd && make deb
 dpkg -i dist/wirelogd-*.deb
 # Start wireguard
