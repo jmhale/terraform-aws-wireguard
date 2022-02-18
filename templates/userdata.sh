@@ -39,7 +39,7 @@ EOF
 
 echo "${peers_recreate}" > /dev/null #Forces user_data replacement
 # fetch peers file and concatenate to wg0.conf
-aws s3 cp s3://wireguard-peers.cl/peers.txt /tmp/peers.txt
+aws s3 cp s3://${peers_bucket}/peers.txt /tmp/peers.txt
 cat /tmp/peers.txt >> /etc/wireguard/wg0.conf
 
 # we go with the eip if it is provided
@@ -59,12 +59,12 @@ ufw --force enable
 # Splunk forwarder setup for wireguard logs
 wget -O /etc/splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz 'https://download.splunk.com/products/universalforwarder/releases/8.2.4/linux/splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz'
 cd /etc && tar xzf splunkforwarder-8.2.4-87e2dda940d1-Linux-x86_64.tgz
-aws s3 cp s3://wireguard-peers.cl/wireguard-log-parser_011.tgz /etc/splunkforwarder/etc/apps/wireguard-log-parser_011.tgz
-aws s3 cp s3://wireguard-peers.cl/splunkclouduf.spl /etc/splunkforwarder/etc/apps/splunkclouduf.spl
+aws s3 cp s3://${peers_bucket}/wireguard-log-parser_011.tgz /etc/splunkforwarder/etc/apps/wireguard-log-parser_011.tgz
+aws s3 cp s3://${peers_bucket}/splunkclouduf.spl /etc/splunkforwarder/etc/apps/splunkclouduf.spl
 cd /etc/splunkforwarder/etc/apps/ && tar -xzf wireguard-log-parser_011.tgz
 /etc/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd ${splunk_pwd}
 /etc/splunkforwarder/bin/splunk install app /etc/splunkforwarder/etc/apps/splunkclouduf.spl -auth admin:${splunk_pwd}
-mkdir -p /etc/splunkforwarder/etc/apps/journald_input/local && aws s3 cp s3://wireguard-peers.cl/inputs.conf /etc/splunkforwarder/etc/apps/journald_input/local/inputs.conf
+mkdir -p /etc/splunkforwarder/etc/apps/journald_input/local && aws s3 cp s3://${peers_bucket}/inputs.conf /etc/splunkforwarder/etc/apps/journald_input/local/inputs.conf
 export SPLUNK_HOME=/etc/splunkforwarder && $SPLUNK_HOME/bin/splunk restart
 # Wirelogd setup
 git clone https://github.com/smartcontractkit/wirelogd.git /etc/wirelogd
