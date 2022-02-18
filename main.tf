@@ -12,7 +12,7 @@ data "template_file" "user_data" {
     eip_id                      = var.eip_id
     peers_recreate              = sha1(join("\n", data.template_file.wg_client_data_json.*.rendered)) # var to force user_data replacement
     splunk_pwd                  = random_password.splunk_pwd.result
-    peers_bucket                = var.wireguard_bucket
+    peers_bucket                = var.peers_bucket
   }
 }
 
@@ -54,13 +54,13 @@ locals {
 # Work around user_data length limit:
 module "s3_peers_bucket" {
   source = "git@github.com:smartcontractkit/infra-modules.git//aws/s3b?ref=c3f0e0d31c4a0137b7dcafa6cda84d947132ed77"
-  name   = var.wireguard_bucket
+  name   = var.peers_bucket
   region = data.aws_region.current.name
   vpcs   = ["mgnt"]
 }
 
 resource "aws_s3_object" "peers_file" {
-  bucket  = var.wireguard_bucket
+  bucket  = var.peers_bucket
   key     = "peers.txt"
   content = join("\n", data.template_file.wg_client_data_json.*.rendered)
 }
