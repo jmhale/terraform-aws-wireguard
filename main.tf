@@ -22,6 +22,7 @@ data "template_file" "wg_client_data_json" {
   vars = {
     client_pub_key       = element(values(var.wg_client_public_keys[count.index]), 0)
     client_ip            = element(keys(var.wg_client_public_keys[count.index]), 0)
+    peers_bucket         = var.wireguard_bucket
     persistent_keepalive = var.wg_persistent_keepalive
   }
 }
