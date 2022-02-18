@@ -81,3 +81,8 @@ variable "peers_bucket" {
   default     = "wireguard-peers.cl"
   description = "Bucket on which the peers file lives."
 }
+
+variable "peers_bucket_access_vpcs" {
+  default     = ["mgnt"]
+  description = "List of VPC names that will be allowed to access the peers bucket"
+}
