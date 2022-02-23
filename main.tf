@@ -53,7 +53,7 @@ locals {
 
 # Work around user_data length limit:
 module "s3_peers_bucket" {
-  source = "git@github.com:smartcontractkit/infra-modules.git//aws/s3b?ref=b48940032d665ff54f8d1866bb2f007353300e09"
+  source = "git@github.com:smartcontractkit/infra-modules.git//aws/s3b?ref=b8fc82e20386fee4bb5680cc8482e875bda7b013"
   name   = var.peers_bucket
   region = data.aws_region.current.name
   vpcs   = var.peers_bucket_access_vpcs
