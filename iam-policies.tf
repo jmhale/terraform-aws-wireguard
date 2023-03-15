@@ -4,7 +4,7 @@ resource "aws_iam_policy" "wireguard_policy" {
 
   description = "Terraform Managed. Allows Wireguard instance to attach EIP."
   policy      = data.aws_iam_policy_document.wireguard_policy_doc.json
-  count       = (var.use_eip ? 1 : 0) # only used for EIP mode
+  count       = (var.eip_id == null ? 0 : 1) # only used for EIP mode
 }
 
 #resource "aws_iam_policy" "ssm_agent_policy" {

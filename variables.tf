@@ -51,14 +51,9 @@ variable "wg_persistent_keepalive" {
   description = "Persistent Keepalive - useful for helping connection stability over NATs."
 }
 
-variable "use_eip" {
-  type        = bool
-  default     = false
-  description = "Whether to enable Elastic IP switching code in user-data on wg server startup. If true, eip_id must also be set to the ID of the Elastic IP."
-}
-
 variable "eip_id" {
   type        = string
+  default     = null
   description = "ID of the Elastic IP to use, when use_eip is enabled."
 }
 
@@ -86,7 +81,7 @@ variable "wg_server_private_key_param" {
 
 variable "ami_id" {
   default     = null # we check for this and use a data provider since we can't use it here
-  description = "The AWS AMI to use for the WG server, defaults to the latest Ubuntu 16.04 AMI if not specified."
+  description = "The AWS AMI to use for the WG server, defaults to the latest Ubuntu 22.04 AMI if not specified."
 }
 
 variable "wg_server_interface" {
@@ -103,4 +98,10 @@ variable "base_resource_name" {
   description = "The base name of resources created in AWS"
   type        = string
   default     = null
+}
+
+variable "ubuntu_version" {
+  description = "The Ubuntu version to use for the server"
+  type        = number
+  default     = 16.04
 }
