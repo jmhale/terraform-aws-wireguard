@@ -10,6 +10,10 @@ resource "aws_security_group" "sg_wireguard_external" {
     env        = var.env
   }
 
+  #  tags = merge(map(
+  #    "Name", local.base_resource_name,
+  #  ), local.common_tags)
+
   ingress {
     from_port   = var.wg_server_port
     to_port     = var.wg_server_port
@@ -36,6 +40,10 @@ resource "aws_security_group" "sg_wireguard_admin" {
     tf-managed = "True"
     env        = var.env
   }
+
+  #  tags = merge(map(
+  #    "Name", local.base_resource_name,
+  #  ), local.common_tags)
 
   ingress {
     from_port       = 0

@@ -93,3 +93,14 @@ variable "wg_server_interface" {
   default     = "eth0"
   description = "The default interface to forward network traffic to."
 }
+
+variable "project_team" {
+  description = "Prefix for resource names - shop, rev, or logic"
+  type        = string
+}
+
+variable "base_resource_name" {
+  description = "The base name of resources created in AWS"
+  type        = string
+  default     = null
+}
